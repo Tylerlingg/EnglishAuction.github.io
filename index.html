@@ -353,18 +353,19 @@
 	}
 ]] // Replace with your contract ABI JSON
 
-    const SEPOLIA_RPC_URL = 'https://sepolia.infura.io/v3/c970aa070ed149938f8c257ad46cb4f4'; // Replace with your Sepolia RPC URL
-    const web3 = new Web3(SEPOLIA_RPC_URL);
-    const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
+        const web3 = new Web3(window.ethereum);
+        const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
 
-    async function placeBid(walletAddress, bidAmountInEther) {
-        const bidAmountInWei = web3.utils.toWei(bidAmountInEther, 'ether');
-        await contract.methods.placeBid().send({ from: walletAddress, value: bidAmountInWei });
-    }
+        async function placeBid(walletAddress, bidAmountInEther) {
+            const bidAmountInWei = web3.utils.toWei(bidAmountInEther, 'ether');
+            await contract.methods.placeBid().send({ from: walletAddress, value: bidAmountInWei });
+        }
 
-    document.getElementById('place-bid').addEventListener('click', async () => {
-        const walletAddress = await connectWallet();
-        const bidAmount = document.getElementById('bid-amount').value;
-        await placeBid(walletAddress, bidAmount);
-    });
-</script>
+        document.getElementById('place-bid').addEventListener('click', async () => {
+            const walletAddress = await connectWallet();
+            const bidAmount = document.getElementById('bid-amount').value;
+            await placeBid(walletAddress, bidAmount);
+        });
+    </script>
+</body>
+</html>
