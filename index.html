@@ -456,7 +456,8 @@
  async function placeBid(walletAddress, bidAmountInEther) {
           const bidAmountInWei = web3.utils.toWei(bidAmountInEther, 'ether');
           const accounts = await web3.eth.getAccounts();
-          const currentHighestBid = await contract.methods['getCurrentHighestBid()']().call();
+          console.log(contract);
+	const currentHighestBid = await contract.methods.getCurrentHighestBid().call();
           if (bidAmountInWei <= currentHighestBid) {
             alert('Bid too low.');
             return;
