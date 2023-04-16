@@ -453,20 +453,36 @@
         const SEPOLIA_RPC_URL = 'https://sepolia.infura.io/v3/c970aa070ed149938f8c257ad46cb4f4'; // Replace with your Sepolia RPC URL
         const web3 = new Web3(SEPOLIA_RPC_URL);
         const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
+ async function placeBid(walletAddress, bidAmountInEther) {
+          const bidAmountInWei = web3.utils.toWei(bidAmountInEther, 'ether');
+          const accounts = await web3.eth.getAccounts();
+          const currentHighestBid = await contract.methods.currentHighestBid().call();
+          if (bidAmountInWei <= currentHighestBid) {
+            alert('Bid too low.');
+            return;
+          }
+          try {
+            await contract.methods.placeBid().send({ from: walletAddress, value: bidAmountInWei });
+            alert('Bid placed successfully!');
+          } catch (error) {
+            alert('Error placing bid: ' + error.message);
+          }
+        }
 
-async function placeBid(walletAddress, bidAmountInEther) {
-  const bidAmountInWei = web3.utils.toWei(bidAmountInEther, 'ether');
-  const accounts = await web3.eth.getAccounts();
-  const currentHighestBid = await contract.methods.currentHighestBid().call();
-  if (bidAmountInWei <= currentHighestBid) {
-    alert('Bid too low.');
-    return;
-  }
-  try {
-    await contract.methods.placeBid().send({ from: walletAddress, value: bidAmountInWei });
-    alert('Bid placed successfully!');
-  } catch (error) {
-    alert('Error placing bid: ' + error.message);
-  }
-}
-
+        document.getElementById('place-bid').addEventListener('click', async () => {
+            const walletAddress = await connectWallet();
+            if (walletAddress) {
+                const bidAmountInput = document.getElementById('bid-amount');
+                const bidAmount = bidAmountInput.value;
+                if (bidAmount) {
+                    await placeBid(walletAddress, bidAmount);
+                } else {
+                    alert('Please enter a bid amount.');
+                }
+            } else {
+                alert('Failed to connect wallet.');
+            }
+        });
+    </script>
+</body>
+</html>
