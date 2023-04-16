@@ -83,7 +83,7 @@
             return accounts[0]; // The connected wallet address
         }
 
-        const CONTRACT_ADDRESS = '0xC70Ee1fED7a1B25f553D0b25D9a4AfafF45d3C8C';
+        const CONTRACT_ADDRESS = '0x0BbDe0d70ef6C30597Bfa950D9f74F99547993f9';
         const ABI = [[
 	{
 		"inputs": [
@@ -305,6 +305,45 @@
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAuctionEndTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentHighestBid",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentHighestBidder",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
