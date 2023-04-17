@@ -469,21 +469,22 @@
             alert('Error placing bid: ' + error.message);
           }
         }
-
         document.getElementById('place-bid').addEventListener('click', async () => {
-            const walletAddress = await connectWallet();
-            if (walletAddress) {
-                const bidAmountInput = document.getElementById('bid-amount');
-                const bidAmount = bidAmountInput.value;
-                if (bidAmount) {
-                    await placeBid(walletAddress, bidAmount);
-                } else {
-                    alert('Please enter a bid amount.');
-                }
-            } else {
-                alert('Failed to connect wallet.');
-            }
-        });
+  try {
+    const walletAddress = await connectWallet();
+    const bidAmountInEther = document.getElementById('bid-amount').value;
+
+    if (bidAmountInEther === '' || parseFloat(bidAmountInEther) <= 0) {
+      alert('Please enter a valid bid amount.');
+      return;
+    }
+
+    await placeBid(walletAddress, bidAmountInEther);
+  } catch (error) {
+    console.error(error);
+    alert('Error placing bid: ' + error.message);
+  }
+});
     </script>
 </body>
 </html>
