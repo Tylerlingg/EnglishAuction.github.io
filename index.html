@@ -85,8 +85,10 @@
 			return accounts[0]; // The connected wallet address
 		}
 
-		const CONTRACT_ADDRESS = '0xa867E359Caf6210636B7bc3EfaaC8975F409725C';
+		const CONTRACT_ADDRESS = '0xA735106e25b3ECB0eF6b588034CB3f0Ade588430';
 		const ABI = [
+	{
+		"inputs": [[
 	{
 		"inputs": [
 			{
@@ -411,7 +413,7 @@
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-] // Replace with your contract ABI JSON
+]] // Replace with your contract ABI JSON
 
 		const SEPOLIA_RPC_URL = 'https://sepolia.infura.io/v3/c970aa070ed149938f8c257ad46cb4f4'; // Replace with your Sepolia RPC URL
 		const web3 = new Web3(window.ethereum);
