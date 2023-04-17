@@ -421,6 +421,8 @@
 			const accounts = await web3.eth.getAccounts();
 			console.log(contract);
 			const currentHighestBidder = await contract.methods.currentHighestBidder().call();
+			const currentHighestBid = await contract.methods.currentHighestBid().call(); // Fetch currentHighestBid from the smart contract
+
 			if (bidAmountInWei <= currentHighestBid) {
 				alert('Bid too low.');
 				return;
@@ -432,6 +434,7 @@
 				alert('Error placing bid: ' + error.message);
 			}
 		}
+
 		document.getElementById('place-bid').addEventListener('click', async () => {
 			try {
 				const walletAddress = await connectWallet();
