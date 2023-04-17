@@ -420,7 +420,7 @@
 			const bidAmountInWei = web3.utils.toWei(bidAmountInEther, 'ether');
 			const accounts = await web3.eth.getAccounts();
 			console.log(contract);
-			const currentHighestBidder = await contract.methods.getCurrentHighestBidder().call();
+			const currentHighestBidder = await contract.methods.currentHighestBidder().call();
 			if (bidAmountInWei <= currentHighestBid) {
 				alert('Bid too low.');
 				return;
