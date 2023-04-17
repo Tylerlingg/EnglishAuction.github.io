@@ -486,14 +486,7 @@
 				console.error(error);
 				alert('Error placing bid: ' + error.message);
 			}
-			(async () => {
-				try {
-					await connectWallet();
-				} catch (error) {
-					console.error(error);
-					alert('Error connecting wallet: ' + error.message);
-				}
-			})();
+		})();
 	</script>
 </body>
 
