@@ -83,7 +83,7 @@
             return accounts[0]; // The connected wallet address
         }
 
-        const CONTRACT_ADDRESS = '0x0BbDe0d70ef6C30597Bfa950D9f74F99547993f9';
+        const CONTRACT_ADDRESS = '0xeDB6A7EC893e1eB85E70E63defaE4F4b824cD929';
         const ABI = [[
 	{
 		"inputs": [
@@ -174,20 +174,6 @@
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "endAuction",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "finalize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -230,20 +216,6 @@
 		],
 		"name": "NewHighestBid",
 		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "placeBid",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "transferNFT",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -299,6 +271,13 @@
 	},
 	{
 		"inputs": [],
+		"name": "endAuction",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "ended",
 		"outputs": [
 			{
@@ -308,6 +287,13 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "finalize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -411,6 +397,13 @@
 	},
 	{
 		"inputs": [],
+		"name": "placeBid",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "royaltyPercentage",
 		"outputs": [
 			{
@@ -446,6 +439,13 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "transferNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]] // Replace with your contract ABI JSON
