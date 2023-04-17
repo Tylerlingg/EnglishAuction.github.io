@@ -451,7 +451,7 @@
 ] // Replace with your contract ABI JSON
 
         const SEPOLIA_RPC_URL = 'https://sepolia.infura.io/v3/c970aa070ed149938f8c257ad46cb4f4'; // Replace with your Sepolia RPC URL
-        const web3 = new Web3(SEPOLIA_RPC_URL);
+        const web3 = new Web3(window.ethereum);
         const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
  async function placeBid(walletAddress, bidAmountInEther) {
           const bidAmountInWei = web3.utils.toWei(bidAmountInEther, 'ether');
@@ -484,7 +484,14 @@
     console.error(error);
     alert('Error placing bid: ' + error.message);
   }
-});
+(async () => {
+  try {
+    await connectWallet();
+  } catch (error) {
+    console.error(error);
+    alert('Error connecting wallet: ' + error.message);
+  }
+})();
     </script>
 </body>
 </html>
