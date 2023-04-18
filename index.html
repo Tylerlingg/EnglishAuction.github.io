@@ -85,7 +85,7 @@
 			return accounts[0]; // The connected wallet address
 		}
 
-		const CONTRACT_ADDRESS = '0x53EF7Dd9087e98406F1f68fb4c23494bDb5cEdA4';
+		const CONTRACT_ADDRESS = '0x9A62b70569606B692B8EF1659509a728a27b9067';
 		const ABI = [
 	{
 		"inputs": [
@@ -113,6 +113,11 @@
 				"internalType": "uint256",
 				"name": "_tokenId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "address payable",
+				"name": "_creator",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -154,6 +159,25 @@
 			}
 		],
 		"name": "AuctionFinalized",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "outbidBidder",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newHighestBid",
+				"type": "uint256"
+			}
+		],
+		"name": "BidOutbid",
 		"type": "event"
 	},
 	{
@@ -273,14 +297,15 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "escrow",
+		"inputs": [],
+		"name": "finalize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAuctionEndTime",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -293,9 +318,28 @@
 	},
 	{
 		"inputs": [],
-		"name": "finalize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "getCurrentHighestBid",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentHighestBidder",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -342,7 +386,7 @@
 				"type": "bytes4"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
@@ -406,12 +450,12 @@
 	},
 	{
 		"inputs": [],
-		"name": "withdraw",
+		"name": "transferNFT",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-] // Replace with your contract ABI JSON
+]
 
 		const SEPOLIA_RPC_URL = 'https://sepolia.infura.io/v3/c970aa070ed149938f8c257ad46cb4f4'; // Replace with your Sepolia RPC URL
 		const web3 = new Web3(window.ethereum);
