@@ -520,6 +520,7 @@ async function initWeb3() {
         web3 = new Web3(window.web3.currentProvider);
     } else {
         console.error('No web3 provider detected');
+    }
 }
 
 initWeb3();
@@ -537,6 +538,7 @@ async function fetchAndUpdateAuctionInfo() {
         document.getElementById('time-left').textContent = formatTime(timeLeft);
     } catch (error) {
         console.error('Error fetching auction info:', error);
+    }
 }
 
 async function placeBid(walletAddress, bidAmountInEther) {
@@ -545,6 +547,7 @@ async function placeBid(walletAddress, bidAmountInEther) {
         await auctionContract.methods.bid().send({ from: walletAddress, value: bidAmountInWei });
     } catch (error) {
         console.error('Error placing bid:', error);
+    }
 }
 document.getElementById('image-input').addEventListener('change', (event) => {
     const file = event.target.files[0];
