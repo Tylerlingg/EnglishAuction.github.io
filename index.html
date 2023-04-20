@@ -543,12 +543,12 @@ async function fetchAndUpdateAuctionInfo() {
 
 async function placeBid(walletAddress, bidAmountInEther) {
     try {
-        // Place a bid using the provided wallet address and bid amount in Ether
+        const bidAmountInWei = web3.utils.toWei(bidAmountInEther.toString(), 'ether');
+        await auctionContract.methods.bid().send({ from: walletAddress, value: bidAmountInWei });
     } catch (error) {
         console.error('Error placing bid:', error);
     }
-}
-
+]
 document.getElementById('image-input').addEventListener('change', (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
