@@ -544,7 +544,7 @@ async function fetchAndUpdateAuctionInfo() {
 async function placeBid(walletAddress, bidAmountInEther) {
     try {
         const bidAmountInWei = web3.utils.toWei(bidAmountInEther.toString(), 'ether');
-        await auctionContract.methods.bid().send({ from: walletAddress, value: bidAmountInWei });
+        await auctionContract.methods.placeBid().send({ from: walletAddress, value: bidAmountInWei });
     } catch (error) {
         console.error('Error placing bid:', error);
     }
