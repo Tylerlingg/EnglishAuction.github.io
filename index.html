@@ -538,6 +538,7 @@ async function fetchAndUpdateAuctionInfo() {
         document.getElementById('time-left').textContent = formatTime(timeLeft);
     } catch (error) {
         console.error('Error fetching auction info:', error);
+    }
 }
 
 async function placeBid(walletAddress, bidAmountInEther) {
@@ -545,6 +546,7 @@ async function placeBid(walletAddress, bidAmountInEther) {
         // Place a bid using the provided wallet address and bid amount in Ether
     } catch (error) {
         console.error('Error placing bid:', error);
+    }
 }
 
 document.getElementById('image-input').addEventListener('change', (event) => {
