@@ -122,6 +122,11 @@ const CONTRACT_ABI = [
 				"internalType": "address payable",
 				"name": "_creator",
 				"type": "address"
+			},
+			{
+				"internalType": "address payable",
+				"name": "_beneficiary",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -216,6 +221,20 @@ const CONTRACT_ABI = [
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "endAuction",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "finalize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -258,6 +277,68 @@ const CONTRACT_ABI = [
 		],
 		"name": "NewHighestBid",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "placeBid",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_start",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_end",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_minimumBid",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "resetAuction",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "transferNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawExcessFunds",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "beneficiary",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -326,9 +407,41 @@ const CONTRACT_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "finalize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "getAuctionEndTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentHighestBid",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentHighestBidder",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -406,41 +519,6 @@ const CONTRACT_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "placeBid",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_start",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_end",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_minimumBid",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "resetAuction",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "royaltyPercentage",
 		"outputs": [
 			{
@@ -477,23 +555,9 @@ const CONTRACT_ABI = [
 		],
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "transferNFT",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdrawExcessFunds",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	}
 ];
-const CONTRACT_ADDRESS = '0x3947ef935Ea34A703f8f59468a918CCf6E49c56B';
+const CONTRACT_ADDRESS = '0xD89A1C12e37747d0B603267D2BB069c433Aa7CB5';
 
 const web3 = new Web3(window.ethereum);
 const auctionContract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
