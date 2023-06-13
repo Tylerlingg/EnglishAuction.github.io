@@ -303,29 +303,9 @@ const contractABI = [
 	}
 ];
 
-let web3;
-let contract;
-
-function initializeWeb3() {
-  if (window.ethereum) {
-    web3 = new Web3(window.ethereum);
-    return true;
-  }
-  return false;
-}
-
-function initializeContract() {
-  contract = new web3.eth.Contract(contractABI, contractAddress);
-}
-
 async function connectWallet() {
-  try {
-    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-    return accounts[0];
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  // Connect the wallet using the Sepolia API or MetaMask, depending on your preference
+  // ...
 }
 
 async function swapTokens() {
@@ -334,9 +314,28 @@ async function swapTokens() {
   const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
 
   try {
-    const result = await contract.methods.swap(amountIn, maxSlippagePercentage, deadline).send({ value: amountIn });
-    document.getElementById("swapResult").textContent = `Swap successful! Transaction hash: ${result.transactionHash}`;
-    document.getElementById("swapResult").style.display = "block";
+    const response = await fetch("https://api.sepolia.io/transactions/swap", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contractAddress,
+        contractABI,
+        amountIn,
+        maxSlippagePercentage,
+        deadline,
+      }),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      document.getElementById("swapResult").textContent = `Swap successful! Transaction hash: ${result.transactionHash}`;
+      document.getElementById("swapResult").style.display = "block";
+    } else {
+      document.getElementById("swapResult").textContent = "Swap failed.";
+      document.getElementById("swapResult").style.display = "block";
+    }
   } catch (error) {
     console.error(error);
     document.getElementById("swapResult").textContent = "Swap failed.";
@@ -345,13 +344,6 @@ async function swapTokens() {
 }
 
 async function main() {
-  if (!initializeWeb3()) {
-    alert("Please install MetaMask to use this website.");
-    return;
-  }
-
-  initializeContract();
-
   const connectButton = document.getElementById("connectButton");
   connectButton.disabled = false;
   connectButton.addEventListener("click", async () => {
