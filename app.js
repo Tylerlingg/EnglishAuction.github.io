@@ -1,7 +1,23 @@
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+// Requesting wallet connection
+const connectWallet = async () => {
+  try {
+    // Request access to the user's MetaMask account
+    await window.ethereum.enable();
+    
+    // Refresh the page after successful connection
+    location.reload();
+  } catch (error) {
+    alert(`Error connecting to wallet: ${error.message}`);
+  }
+};
 
-const contractAbi = [
+// Check if MetaMask is installed
+if (typeof window.ethereum !== 'undefined') {
+  // MetaMask is available
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const contractAbi = [
 	{
 		"inputs": [
 			{
@@ -304,12 +320,12 @@ const contractAbi = [
 		"type": "function"
 	}
 ];
-const contractAddress = "0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe"; // Replace this with your contract's actual address
+  const contractAddress = "0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe"; // Replace this with your contract's actual address
 
-const contract = new ethers.Contract(contractAddress, contractAbi, provider).connect(signer);
+  const contract = new ethers.Contract(contractAddress, contractAbi, provider).connect(signer);
 
-// Set up form event listener for swap
-document.getElementById("swap-form").addEventListener("submit", async function(event) {
+  // Set up form event listener for swap
+  document.getElementById("swap-form").addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const amountIn = ethers.utils.parseEther(document.getElementById("amount-in").value);
@@ -317,43 +333,50 @@ document.getElementById("swap-form").addEventListener("submit", async function(e
     const deadline = parseInt(document.getElementById("deadline").value);
 
     try {
-        const tx = await contract.swap(amountIn, maxSlippagePercentage, deadline, { value: amountIn });
-        alert(`Transaction sent with hash: ${tx.hash}`);
+      const tx = await contract.swap(amountIn, maxSlippagePercentage, deadline, { value: amountIn });
+      alert(`Transaction sent with hash: ${tx.hash}`);
     } catch (error) {
-        alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`);
     }
-});
+  });
 
-// Set up form event listener for addLiquidity
-document.getElementById("add-liquidity-form").addEventListener("submit", async function(event) {
+  // Set up form event listener for addLiquidity
+  document.getElementById("add-liquidity-form").addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const amountETH = ethers.utils.parseEther(document.getElementById("amount-eth").value);
     const amountToken = ethers.utils.parseEther(document.getElementById("amount-token").value);
 
     try {
-        // Approve the contract to spend tokens on behalf of the user
-        const approveTx = await contract.approveToken(amountToken);
-        await approveTx.wait();
+      // Approve the contract to spend tokens on behalf of the user
+      const approveTx = await contract.approveToken(amountToken);
+      await approveTx.wait();
 
-        // Add liquidity
-        const addLiquidityTx = await contract.addLiquidity(amountToken, { value: amountETH });
-        alert(`Transaction sent with hash: ${addLiquidityTx.hash}`);
+      // Add liquidity
+      const addLiquidityTx = await contract.addLiquidity(amountToken, { value: amountETH });
+      alert(`Transaction sent with hash: ${addLiquidityTx.hash}`);
     } catch (error) {
-        alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`);
     }
-});
+  });
 
-// Set up form event listener for removeLiquidity
-document.getElementById("remove-liquidity-form").addEventListener("submit", async function(event) {
+  // Set up form event listener for removeLiquidity
+  document.getElementById("remove-liquidity-form").addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const liquidity = ethers.utils.parseEther(document.getElementById("remove-liquidity-amount").value);
 
     try {
-        const tx = await contract.removeLiquidity(liquidity);
-        alert(`Transaction sent with hash: ${tx.hash}`);
+      const tx = await contract.removeLiquidity(liquidity);
+      alert(`Transaction sent with hash: ${tx.hash}`);
     } catch (error) {
-        alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`);
     }
-});
+  });
+} else {
+  // MetaMask is not available, display a message or fallback behavior
+  alert("MetaMask is not installed. Please install MetaMask to use this website.");
+}
+
+// Add wallet connect button click event listener
+document.getElementById("connect-wallet-button").addEventListener("click", connectWallet);
