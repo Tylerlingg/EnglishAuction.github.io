@@ -10,8 +10,8 @@
     <h1>Your Decentralized Exchange</h1>
 
     <form id="swap-form">
-        <label for="amount">Amount Token to Swap:</label>
-        <input id="amount" type="number" step="any" min="0">
+        <label for="amount-in">Amount Token to Swap:</label>
+        <input id="amount-in" type="number" step="any" min="0">
         
         <label for="max-slippage-percentage">Max Slippage Percentage:</label>
         <input id="max-slippage-percentage" type="number" min="0" max="3">
@@ -38,6 +38,8 @@
 
         <button type="submit">Remove Liquidity</button>
     </form>
+
+    <button id="connect-wallet-button">Connect Wallet</button>
 
     <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"></script>
     <script src="app.js"></script>
