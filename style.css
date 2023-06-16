@@ -1,44 +1,11 @@
-/* Add your custom CSS styles for the frog theme here */
 body {
-    background-color: #84CF96;
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
 }
 
-h1 {
-    color: #FFFFFF;
-}
-
-.container {
-    margin: 0 auto;
-    max-width: 500px;
-}
-
-.input-container {
-    display: flex;
-    justify-content: space-between;
+div {
     margin-bottom: 20px;
 }
 
 input {
-    padding: 10px;
-    width: 70%;
-}
-
-button {
-    background-color: #FFA726;
-    border: none;
-    border-radius: 4px;
-    color: #FFFFFF;
-    cursor: pointer;
-    padding: 10px;
-    width: 25%;
-}
-
-.result-container {
-    background-color: #FFFFFF;
-    border-radius: 4px;
-    padding: 20px;
+    margin-right: 10px;
 }
