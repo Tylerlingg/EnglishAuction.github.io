@@ -1,5 +1,6 @@
-const contractAddress = "0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe";
-const contractABI = [
+let web3 = new Web3(window.ethereum);
+let contractAddress = "0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe";
+let abi = [
 	{
 		"inputs": [
 			{
@@ -302,60 +303,59 @@ const contractABI = [
 		"type": "function"
 	}
 ];
+let contract = new web3.eth.Contract(abi, contractAddress);
 
-async function connectWallet() {
-  // Connect the wallet using the Sepolia API or MetaMask, depending on your preference
-  // ...
+async function getAccount() {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    return accounts[0];
 }
 
-async function swapTokens() {
-  const amountIn = document.getElementById("amountIn").value;
-  const maxSlippagePercentage = document.getElementById("maxSlippagePercentage").value;
-  const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
+document.getElementById('connectButton').addEventListener('click', async () => {
+    const account = await getAccount();
+    console.log(account);
+});
 
-  try {
-    const response = await fetch("https://api.sepolia.io/transactions/swap", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contractAddress,
-        contractABI,
-        amountIn,
-        maxSlippagePercentage,
-        deadline,
-      }),
-    });
+document.getElementById('addLiquidityButton').addEventListener('click', async () => {
+    const amount = document.getElementById('addLiquidityAmount').value;
+    const account = await getAccount();
+    contract.methods.addLiquidity(amount).send({ from: account, value: web3.utils.toWei('1', 'ether') })
+        .on('transactionHash', function(hash){
+            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
+        })
+        .on('receipt', function(receipt){
+            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction confirmed!';
+        })
+        .on('error', function(error, receipt) {
+            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction failed: ' + error.message;
+        });
+});
 
-    const result = await response.json();
-    if (result.success) {
-      document.getElementById("swapResult").textContent = `Swap successful! Transaction hash: ${result.transactionHash}`;
-      document.getElementById("swapResult").style.display = "block";
-    } else {
-      document.getElementById("swapResult").textContent = "Swap failed.";
-      document.getElementById("swapResult").style.display = "block";
-    }
-  } catch (error) {
-    console.error(error);
-    document.getElementById("swapResult").textContent = "Swap failed.";
-    document.getElementById("swapResult").style.display = "block";
-  }
-}
+document.getElementById('removeLiquidityButton').addEventListener('click', async () => {
+    const amount = document.getElementById('removeLiquidityAmount').value;
+    const account = await getAccount();
+    contract.methods.removeLiquidity(amount).send({ from: account })
+        .on('transactionHash', function(hash){
+            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
+        })
+        .on('receipt', function(receipt){
+            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction confirmed!';
+        })
+        .on('error', function(error, receipt) {
+            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction failed: ' + error.message;
+        });
+});
 
-async function main() {
-  const connectButton = document.getElementById("connectButton");
-  connectButton.disabled = false;
-  connectButton.addEventListener("click", async () => {
-    const account = await connectWallet();
-    if (account) {
-      connectButton.style.display = "none";
-      document.getElementById("exchangeForm").style.display = "block";
-    }
-  });
-
-  const swapButton = document.getElementById("swapButton");
-  swapButton.addEventListener("click", swapTokens);
-}
-
-main();
+document.getElementById('swapButton').addEventListener('click', async () => {
+    const amount = document.getElementById('swapAmount').value;
+    const account = await getAccount();
+    contract.methods.swap(amount, 3, Math.floor(Date.now() / 1000) + 300).send({ from: account, value: web3.utils.toWei('1', 'ether') })
+        .on('transactionHash', function(hash){
+            document.getElementById('swapStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
+        })
+        .on('receipt', function(receipt){
+            document.getElementById('swapStatus').innerHTML = 'Transaction confirmed!';
+        })
+        .on('error', function(error, receipt) {
+            document.getElementById('swapStatus').innerHTML = 'Transaction failed: ' + error.message;
+        });
+});
