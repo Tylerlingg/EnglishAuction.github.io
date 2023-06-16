@@ -1,47 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>pepeDex</title>
-    <style>
-        body {
-            background-image: url("path/to/your/frog-background.jpg");
-            background-size: cover;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            padding: 50px;
-            background-color: rgba(255,255,255,0.8);
-            border-radius: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: green;
-            color: white;
-        }
-    </style>
+    <title>Simple AMM</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Frog-themed AMM!</h1>
-        <div id="balance"></div>
-        <input type="text" id="approveAmount" placeholder="Amount to Approve">
-        <button onclick="approveToken()">Approve Token</button>
-        <input type="text" id="addLiquidityAmount" placeholder="Amount to Add Liquidity">
+    <h1>Simple Automated Market Maker</h1>
+    <div>
+        <h2>Add Liquidity</h2>
+        <input id="addLiquidityAmount" type="number" placeholder="Token amount" min="0">
         <button onclick="addLiquidity()">Add Liquidity</button>
-        <input type="text" id="removeLiquidityAmount" placeholder="Amount to Remove Liquidity">
+    </div>
+    <div>
+        <h2>Remove Liquidity</h2>
+        <input id="removeLiquidityAmount" type="number" placeholder="Token amount" min="0">
         <button onclick="removeLiquidity()">Remove Liquidity</button>
-        <input type="text" id="swapAmount" placeholder="Amount to Swap">
-        <input type="text" id="slippage" placeholder="Max Slippage">
-        <input type="text" id="deadline" placeholder="Deadline">
+    </div>
+    <div>
+        <h2>Swap Tokens</h2>
+        <input id="swapAmount" type="number" placeholder="Token amount" min="0">
         <button onclick="swap()">Swap</button>
     </div>
-    <script src="web3.min.js"></script>
+    <div>
+        <h2>Reserves</h2>
+        <p id="reserveETH"></p>
+        <p id="reserveToken"></p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.3.4/dist/web3.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
