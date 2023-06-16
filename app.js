@@ -1,6 +1,11 @@
-// Contract address and ABI
-const contractAddress = '0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe';
-const contractABI = [
+// Assuming MetaMask is installed
+const web3 = new Web3(window.ethereum);
+let accounts = [];
+let contract;
+
+// Replace these with your contract's details
+const contractAddress = '0xD57B0BfC18Ce36695676b661416a305e304bd97c';
+const abi = [
 	{
 		"inputs": [
 			{
@@ -12,19 +17,6 @@ const contractABI = [
 		"name": "addLiquidity",
 		"outputs": [],
 		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "approveToken",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -150,44 +142,6 @@ const contractABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amountIn",
-				"type": "uint256"
-			}
-		],
-		"name": "calculateOutgoingAmount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "getLiquidity",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "getReserves",
 		"outputs": [
@@ -196,19 +150,6 @@ const contractABI = [
 				"name": "",
 				"type": "uint256"
 			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getTotalLiquidity",
-		"outputs": [
 			{
 				"internalType": "uint256",
 				"name": "",
@@ -304,24 +245,39 @@ const contractABI = [
 	}
 ];
 
-// Initialize the web3 provider
-const web3Provider = new Web3.providers.HttpProvider('https://sepolia-testnet-url');
-const web3 = new Web3(web3Provider);
-
-// Instantiate the smart contract
-const contract = new web3.eth.Contract(contractABI, contractAddress);
-
-// Function to swap tokens
-async function swap() {
-    const amountIn = document.getElementById('amountIn').value;
-    const maxSlippagePercentage = 3; // Adjust the maximum slippage percentage
-
-    // Call the swap function of your smart contract
-    const result = await contract.methods.swap(amountIn, maxSlippagePercentage, Date.now() + 3600000).send({ from: 'YOUR_WALLET_ADDRESS' });
-
-    // Update the UI with the result
-    document.getElementById('amountOut').textContent = result.events.Swapped.returnValues.amountOut;
+window.onload = async () => {
+    // Request account access
+    await window.ethereum.enable();
+    accounts = await web3.eth.getAccounts();
+    
+    // Initiate contract
+    contract = new web3.eth.Contract(abi, contractAddress);
+    
+    // Display initial reserves
+    await displayReserves();
 }
 
-// Attach the swap function to the button click event
-document.getElementById('swapButton').addEventListener('click', swap);
+async function displayReserves() {
+    const reserves = await contract.methods.getReserves().call();
+    document.getElementById('reserveETH').innerText = `ETH: ${web3.utils.fromWei(reserves[0], 'ether')}`;
+    document.getElementById('reserveToken').innerText = `Token: ${web3.utils.fromWei(reserves[1], 'ether')}`;
+}
+
+function addLiquidity() {
+    const amount = document.getElementById('addLiquidityAmount').value;
+    contract.methods.addLiquidity(web3.utils.toWei(amount, 'ether')).send({from: accounts[0], value: web3.utils.toWei(amount, 'ether')}).then(displayReserves);
+}
+
+function removeLiquidity() {
+    const amount = document.getElementById('removeLApologies for the cut-off. Let me complete the JavaScript (`app.js`) for you:
+
+```javascript
+function removeLiquidity() {
+    const amount = document.getElementById('removeLiquidityAmount').value;
+    contract.methods.removeLiquidity(web3.utils.toWei(amount, 'ether')).send({from: accounts[0]}).then(displayReserves);
+}
+
+function swap() {
+    const amount = document.getElementById('swapAmount').value;
+    contract.methods.swap(web3.utils.toWei(amount, 'ether'), MAX_SLIPPAGE_PERCENTAGE, Math.floor(Date.now() / 1000) + 600).send({from: accounts[0], value: web3.utils.toWei(amount, 'ether')}).then(displayReserves);
+}
