@@ -1,33 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PEPE Dex</title>
+    <title>FrogDEX - Decentralized Exchange</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>PEPE Decentralized Exchange</h1>
-        <button id="connectButton" class="btn">Connect Wallet</button>
-        <div class="section">
-            <h2>Add Liquidity</h2>
-            <input id="addLiquidityAmount" type="number" placeholder="Amount of Tokens" />
-            <button id="addLiquidityButton" class="btn">Add Liquidity</button>
-            <p id="addLiquidityStatus"></p>
+        <h1>FrogDEX - Decentralized Exchange</h1>
+        
+        <div class="input-container">
+            <input id="amountIn" type="number" placeholder="Amount In" />
+            <button id="swapButton">Swap</button>
         </div>
-        <div class="section">
-            <h2>Remove Liquidity</h2>
-            <input id="removeLiquidityAmount" type="number" placeholder="Amount of Liquidity" />
-            <button id="removeLiquidityButton" class="btn">Remove Liquidity</button>
-            <p id="removeLiquidityStatus"></p>
-        </div>
-        <div class="section">
-            <h2>Swap ETH for PEPE</h2>
-            <input id="swapAmount" type="number" placeholder="Amount of ETH" />
-            <button id="swapButton" class="btn">Swap</button>
-            <p id="swapStatus"></p>
+        
+        <div class="result-container">
+            <p>Amount Out: <span id="amountOut">0</span></p>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
-    <script src="app.js"></script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
