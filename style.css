@@ -1,28 +1,41 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #008000;  /* This is the line that changes the text color to green */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .container {
-    width: 60%;
-    margin: auto;
-    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.btn {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #008000;  /* This is the line that changes the button color to green */
+    color: #ffffff;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.btn:hover {
-    background-color: #45a049;
+button:disabled {
+    background-color: #cccccc;
 }
 
-.section {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+button:hover:enabled {
+    background-color: #006600;  /* This is the line that changes the button hover color to a darker green */
+}
+
+.status {
+    height: 20px;
 }
