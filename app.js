@@ -1,6 +1,6 @@
-let web3 = new Web3(window.ethereum);
-let contractAddress = "0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe";
-let abi = [
+// Contract address and ABI
+const contractAddress = '0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe';
+const contractABI = [
 	{
 		"inputs": [
 			{
@@ -303,59 +303,25 @@ let abi = [
 		"type": "function"
 	}
 ];
-let contract = new web3.eth.Contract(abi, contractAddress);
 
-async function getAccount() {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    return accounts[0];
+// Initialize the web3 provider
+const web3Provider = new Web3.providers.HttpProvider('https://sepolia-testnet-url');
+const web3 = new Web3(web3Provider);
+
+// Instantiate the smart contract
+const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+// Function to swap tokens
+async function swap() {
+    const amountIn = document.getElementById('amountIn').value;
+    const maxSlippagePercentage = 3; // Adjust the maximum slippage percentage
+
+    // Call the swap function of your smart contract
+    const result = await contract.methods.swap(amountIn, maxSlippagePercentage, Date.now() + 3600000).send({ from: 'YOUR_WALLET_ADDRESS' });
+
+    // Update the UI with the result
+    document.getElementById('amountOut').textContent = result.events.Swapped.returnValues.amountOut;
 }
 
-document.getElementById('connectButton').addEventListener('click', async () => {
-    const account = await getAccount();
-    console.log(account);
-});
-
-document.getElementById('addLiquidityButton').addEventListener('click', async () => {
-    const amount = document.getElementById('addLiquidityAmount').value;
-    const account = await getAccount();
-    contract.methods.addLiquidity(amount).send({ from: account, value: web3.utils.toWei('1', 'ether') })
-        .on('transactionHash', function(hash){
-            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
-        })
-        .on('receipt', function(receipt){
-            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction confirmed!';
-        })
-        .on('error', function(error, receipt) {
-            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction failed: ' + error.message;
-        });
-});
-
-document.getElementById('removeLiquidityButton').addEventListener('click', async () => {
-    const amount = document.getElementById('removeLiquidityAmount').value;
-    const account = await getAccount();
-    contract.methods.removeLiquidity(amount).send({ from: account })
-        .on('transactionHash', function(hash){
-            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
-        })
-        .on('receipt', function(receipt){
-            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction confirmed!';
-        })
-        .on('error', function(error, receipt) {
-            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction failed: ' + error.message;
-        });
-});
-
-document.getElementById('swapButton').addEventListener('click', async () => {
-    const amount = document.getElementById('swapAmount').value;
-    const account = await getAccount();
-    contract.methods.swap(amount, 3, Math.floor(Date.now() / 1000) + 300).send({ from: account, value: web3.utils.toWei('1', 'ether') })
-        .on('transactionHash', function(hash){
-            document.getElementById('swapStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
-        })
-        .on('receipt', function(receipt){
-            document.getElementById('swapStatus').innerHTML = 'Transaction confirmed!';
-        })
-        .on('error', function(error, receipt) {
-            document.getElementById('swapStatus').innerHTML = 'Transaction failed: ' + error.message;
-        });
-});
+// Attach the swap function to the button click event
+document.getElementById('swapButton').addEventListener('click', swap);
