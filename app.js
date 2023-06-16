@@ -1,6 +1,6 @@
-let web3 = new Web3(window.ethereum);
-let contractAddress = "0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe";
-let abi = [
+const web3 = new Web3(Web3.givenProvider);
+const contractAddress = "0x244FDA4c6F4df773C2BD6d80836E3846eCecAAAe";
+const contractABI = "[
 	{
 		"inputs": [
 			{
@@ -302,60 +302,46 @@ let abi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-];
-let contract = new web3.eth.Contract(abi, contractAddress);
+];";
+const contract = new web3.eth.Contract(contractABI, contractAddress);
 
-async function getAccount() {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    return accounts[0];
+const addLiquidityButton = document.getElementById('addLiquidityButton');
+const removeLiquidityButton = document.getElementById('removeLiquidityButton');
+const swapButton = document.getElementById('swapButton');
+const amountInput = document.getElementById('amountInput');
+const statusDiv = document.getElementById('status');
+
+addLiquidityButton.addEventListener('click', () => {
+    const amount = amountInput.value;
+    const amountInWei = web3.utils.toWei(amount, 'ether');
+    addLiquidity(amountInWei);
+});
+
+removeLiquidityButton.addEventListener('click', () => {
+    const amount = amountInput.value;
+    removeLiquidity(amount);
+});
+
+swapButton.addEventListener('click', () => {
+    const amount = amountInput.value;
+    const amountInWei = web3.utils.toWei(amount, 'ether');
+    swap(amountInWei);
+});
+
+async function addLiquidity(amount) {
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const account = accounts[0];
+    await contract.methods.addLiquidity(amount).send({ from: account, value: amount });
 }
 
-document.getElementById('connectButton').addEventListener('click', async () => {
-    const account = await getAccount();
-    console.log(account);
-});
+async function removeLiquidity(amount) {
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const account = accounts[0];
+    await contract.methods.removeLiquidity(amount).send({ from: account });
+}
 
-document.getElementById('addLiquidityButton').addEventListener('click', async () => {
-    const amount = document.getElementById('addLiquidityAmount').value;
-    const account = await getAccount();
-    contract.methods.addLiquidity(amount).send({ from: account, value: web3.utils.toWei('1', 'ether') })
-        .on('transactionHash', function(hash){
-            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
-        })
-        .on('receipt', function(receipt){
-            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction confirmed!';
-        })
-        .on('error', function(error, receipt) {
-            document.getElementById('addLiquidityStatus').innerHTML = 'Transaction failed: ' + error.message;
-        });
-});
-
-document.getElementById('removeLiquidityButton').addEventListener('click', async () => {
-    const amount = document.getElementById('removeLiquidityAmount').value;
-    const account = await getAccount();
-    contract.methods.removeLiquidity(amount).send({ from: account })
-        .on('transactionHash', function(hash){
-            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
-        })
-        .on('receipt', function(receipt){
-            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction confirmed!';
-        })
-        .on('error', function(error, receipt) {
-            document.getElementById('removeLiquidityStatus').innerHTML = 'Transaction failed: ' + error.message;
-        });
-});
-
-document.getElementById('swapButton').addEventListener('click', async () => {
-    const amount = document.getElementById('swapAmount').value;
-    const account = await getAccount();
-    contract.methods.swap(amount, 3, Math.floor(Date.now() / 1000) + 300).send({ from: account, value: web3.utils.toWei('1', 'ether') })
-        .on('transactionHash', function(hash){
-            document.getElementById('swapStatus').innerHTML = 'Transaction sent. Waiting for confirmation...';
-        })
-        .on('receipt', function(receipt){
-            document.getElementById('swapStatus').innerHTML = 'Transaction confirmed!';
-        })
-        .on('error', function(error, receipt) {
-            document.getElementById('swapStatus').innerHTML = 'Transaction failed: ' + error.message;
-        });
-});
+async function swap(amount) {
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const account = accounts[0];
+    await contract.methods.swap(amount).send({ from: account });
+}
