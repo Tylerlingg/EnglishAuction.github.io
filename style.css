@@ -1,48 +1,26 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #d2f5e3;
+    background: url('https://github.com/Tylerlingg/pepeDex.github.io/blob/main/images/IMG_0151.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
 }
 
-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.container {
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background to the container */
+    border-radius: 15px;
     padding: 20px;
-    background-color: #81c784;
-}
-
-img {
-    height: 50px;
-    width: 50px;
-    margin-right: 10px;
-}
-
-h1, h2 {
-    color: #33691e;
-}
-
-section {
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #ffffff;
+    margin: 0 auto;
+    max-width: 800px;
 }
 
 button {
-    background-color: #81c784;
-    color: white;
+    background-color: #4CAF50;
     border: none;
-    padding: 10px 20px;
+    color: white;
+    padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
-    transition-duration: 0.4s;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #33691e;
-    color: white;
 }
