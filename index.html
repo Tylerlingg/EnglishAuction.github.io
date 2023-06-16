@@ -1,23 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>FrogDEX - Decentralized Exchange</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Frog-themed AMM</title>
+    <style>
+        body {
+            background-image: url("path/to/your/frog-background.jpg");
+            background-size: cover;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 50px;
+            background-color: rgba(255,255,255,0.8);
+            border-radius: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: green;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>FrogDEX - Decentralized Exchange</h1>
-        
-        <div class="input-container">
-            <input id="amountIn" type="number" placeholder="Amount In" />
-            <button id="swapButton">Swap</button>
-        </div>
-        
-        <div class="result-container">
-            <p>Amount Out: <span id="amountOut">0</span></p>
-        </div>
+        <h1>Welcome to Frog-themed AMM!</h1>
+        <div id="balance"></div>
+        <input type="text" id="approveAmount" placeholder="Amount to Approve">
+        <button onclick="approveToken()">Approve Token</button>
+        <input type="text" id="addLiquidityAmount" placeholder="Amount to Add Liquidity">
+        <button onclick="addLiquidity()">Add Liquidity</button>
+        <input type="text" id="removeLiquidityAmount" placeholder="Amount to Remove Liquidity">
+        <button onclick="removeLiquidity()">Remove Liquidity</button>
+        <input type="text" id="swapAmount" placeholder="Amount to Swap">
+        <input type="text" id="slippage" placeholder="Max Slippage">
+        <input type="text" id="deadline" placeholder="Deadline">
+        <button onclick="swap()">Swap</button>
     </div>
-    
-    <script src="script.js"></script>
+    <script src="web3.min.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
