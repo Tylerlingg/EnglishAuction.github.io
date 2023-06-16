@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple AMM</title>
+    <title>Froggy AMM</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <h1>Simple Automated Market Maker</h1>
-    <div>
+    <header>
+        <img src="frog.png" alt="Frog Logo">
+        <h1>Froggy Automated Market Maker</h1>
+    </header>
+    <section>
         <h2>Add Liquidity</h2>
         <input id="addLiquidityAmount" type="number" placeholder="Token amount" min="0">
         <button onclick="addLiquidity()">Add Liquidity</button>
-    </div>
-    <div>
+    </section>
+    <section>
         <h2>Remove Liquidity</h2>
         <input id="removeLiquidityAmount" type="number" placeholder="Token amount" min="0">
         <button onclick="removeLiquidity()">Remove Liquidity</button>
-    </div>
-    <div>
+    </section>
+    <section>
         <h2>Swap Tokens</h2>
         <input id="swapAmount" type="number" placeholder="Token amount" min="0">
         <button onclick="swap()">Swap</button>
-    </div>
-    <div>
+    </section>
+    <section>
         <h2>Reserves</h2>
         <p id="reserveETH"></p>
         <p id="reserveToken"></p>
-    </div>
+    </section>
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.3.4/dist/web3.min.js"></script>
     <script src="app.js"></script>
 </body>
