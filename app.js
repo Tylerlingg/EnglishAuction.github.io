@@ -1,11 +1,26 @@
-// Assuming MetaMask is installed
-const web3 = new Web3(window.ethereum);
-let accounts = [];
+let web3;
 let contract;
+let accounts;
 
-// Replace these with your contract's details
-const contractAddress = '0xD57B0BfC18Ce36695676b661416a305e304bd97c';
-const abi = [
+// Function to initialize web3
+async function initWeb3() {
+    if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
+    }
+    else if (window.web3) {
+        window.web3 = new Web3(window.web3.currentProvider);
+    }
+    else {
+        window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
+    }
+    web3 = window.web3;
+}
+
+// Function to initialize contract
+async function initContract() {
+    const contractAddress = '0xD57B0BfC18Ce36695676b661416a305e304bd97c';
+    const contractABI = [
 	{
 		"inputs": [
 			{
@@ -244,40 +259,73 @@ const abi = [
 		"type": "function"
 	}
 ];
+    contract = new web3.eth.Contract(contractABI, contractAddress);
+}
 
-window.onload = async () => {
-    // Request account access
-    await window.ethereum.enable();
+// Function to initialize account
+async function initAccount() {
     accounts = await web3.eth.getAccounts();
-    
-    // Initiate contract
-    contract = new web3.eth.Contract(abi, contractAddress);
-    
-    // Display initial reserves
-    await displayReserves();
 }
 
-async function displayReserves() {
-    const reserves = await contract.methods.getReserves().call();
-    document.getElementById('reserveETH').innerText = `ETH: ${web3.utils.fromWei(reserves[0], 'ether')}`;
-    document.getElementById('reserveToken').innerText = `Token: ${web3.utils.fromWei(reserves[1], 'ether')}`;
+// Function to initialize app
+async function initApp() {
+    await initWeb3();
+    await initContract();
+    await initAccount();
+    await updateUI();
 }
 
-function addLiquidity() {
-    const amount = document.getElementById('addLiquidityAmount').value;
-    contract.methods.addLiquidity(web3.utils.toWei(amount, 'ether')).send({from: accounts[0], value: web3.utils.toWei(amount, 'ether')}).then(displayReserves);
+window.addEventListener('load', initApp);
+
+async function addLiquidity() {
+    const amountToken = document.getElementById('addLiquidityAmount').value;
+    const amountETH = web3.utils.toWei(document.getElementById('addLiquidityETH').value, 'ether');
+    if (amountToken <= 0 || amountETH <= 0) {
+        window.alert('Please enter a valid amount.');
+        return;
+    }
+    try {
+        await contract.methods.addLiquidity(amountToken).send({ from: accounts[0], value: amountETH });
+        await updateUI();
+    } catch (error) {
+        console.error('An error occurred: ', error);
+        window.alert('An error occurred. Please check the console for more details.');
+    }
 }
 
-function removeLiquidity() {
-    const amount = document.getElementById('removeLApologies for the cut-off. Let me complete the JavaScript (`app.js`) for you:
-
-```javascript
-function removeLiquidity() {
-    const amount = document.getElementById('removeLiquidityAmount').value;
-    contract.methods.removeLiquidity(web3.utils.toWei(amount, 'ether')).send({from: accounts[0]}).then(displayReserves);
+async function removeLiquidity() {
+    const liquidity = document.getElementById('removeLiquidity').value;
+    if (liquidity <= 0) {
+        window.alert('Please enter a valid amount.');
+        return;
+    }
+    try {
+        await contract.methods.removeLiquidity(liquidity).send({ from: accounts[0] });
+        await updateUI();
+    } catch (error) {
+        console.error('An error occurred: ', error);
+        window.alert('An error occurred. Please check the console for more details.');
+    }
 }
 
-function swap() {
-    const amount = document.getElementById('swapAmount').value;
-    contract.methods.swap(web3.utils.toWei(amount, 'ether'), MAX_SLIPPAGE_PERCENTAGE, Math.floor(Date.now() / 1000) + 600).send({from: accounts[0], value: web3.utils.toWei(amount, 'ether')}).then(displayReserves);
+async function swap() {
+    const amountIn = document.getElementById('swapAmountIn').value;
+    const maxSlippage = document.getElementById('swapMaxSlippage').value;
+    const deadline = document.getElementById('swapDeadline').value;
+    const amountETH = web3.utils.toWei(document.getElementById('swapETH').value, 'ether');
+    if (amountIn <= 0 || maxSlippage < 0 || maxSlippage > 100 || deadline <= Date.now() || amountETH <= 0) {
+        window.alert('Please enter valid values.');
+        return;
+    }
+    try {
+        await contract.methods.swap(amountIn, maxSlippage, deadline).send({ from: accounts[0], value: amountETH });
+        await updateUI();
+    } catch (error) {
+        console.error('An error occurred: ', error);
+        window.alert('An error occurred. Please check the console for more details.');
+    }
+}
+
+async function updateUI() {
+    // update UI with the latest contract and account info
 }
