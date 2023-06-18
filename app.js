@@ -1,25 +1,13 @@
-let web3;
-let contract;
-let accounts;
+document.addEventListener('DOMContentLoaded', async () => {
+    // Check if Web3 is injected
+    if (typeof web3 !== 'undefined') {
+        window.web3 = new Web3(web3.currentProvider);
+    } else {
+        alert('Please install MetaMask');
+        return;
+    }
 
-// Function to initialize web3
-async function initWeb3() {
-    if (window.ethereum) {
-        window.web3 = new Web3(window.ethereum);
-        await window.ethereum.enable();
-    }
-    else if (window.web3) {
-        window.web3 = new Web3(window.web3.currentProvider);
-    }
-    else {
-        window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
-    }
-    web3 = window.web3;
-}
-
-// Function to initialize contract
-async function initContract() {
-    const contractAddress = '0xD57B0BfC18Ce36695676b661416a305e304bd97c';
+    // Set Contract ABI & Address
     const contractABI = [
 	{
 		"inputs": [
@@ -35,6 +23,13 @@ async function initContract() {
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "claimFees",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "contract IERC20",
@@ -44,6 +39,25 @@ async function initContract() {
 		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "FeesClaimed",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -117,7 +131,12 @@ async function initContract() {
 			},
 			{
 				"internalType": "uint256",
-				"name": "maxSlippagePercentage",
+				"name": "amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "maxSlippage",
 				"type": "uint256"
 			},
 			{
@@ -128,7 +147,7 @@ async function initContract() {
 		],
 		"name": "swap",
 		"outputs": [],
-		"stateMutability": "payable",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -157,14 +176,62 @@ async function initContract() {
 		"type": "event"
 	},
 	{
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
 		"inputs": [],
-		"name": "getReserves",
+		"name": "accumulatedFees",
 		"outputs": [
 			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
-			},
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "FEE_PERCENTAGE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getLatestPrice",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "lastAccumulatedFees",
+		"outputs": [
 			{
 				"internalType": "uint256",
 				"name": "",
@@ -195,37 +262,16 @@ async function initContract() {
 	},
 	{
 		"inputs": [],
-		"name": "MAX_SLIPPAGE_PERCENTAGE",
+		"name": "reserves",
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "reserveETH",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reserveETH",
-		"outputs": [
+			},
 			{
 				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reserveToken",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
+				"name": "reserveToken",
 				"type": "uint256"
 			}
 		],
@@ -258,74 +304,36 @@ async function initContract() {
 		"stateMutability": "view",
 		"type": "function"
 	}
-];
-    contract = new web3.eth.Contract(contractABI, contractAddress);
-}
+]; // Add contract ABI here
+    const contractAddress = '0xb178Cc6e3602Fc15E70e7fbfdA898f817d65E2e7'; // Add contract address here
 
-// Function to initialize account
-async function initAccount() {
-    accounts = await web3.eth.getAccounts();
-}
+    // Create Contract Instance
+    const pepeDexContract = new web3.eth.Contract(contractABI, contractAddress);
 
-// Function to initialize app
-async function initApp() {
-    await initWeb3();
-    await initContract();
-    await initAccount();
-    await updateUI();
-}
+    // Add event listeners
+    window.addLiquidity = async () => {
+        const amount = document.getElementById('add-liquidity-amount').value;
+        const accounts = await web3.eth.getAccounts();
+        pepeDexContract.methods.addLiquidity(amount).send({ from: accounts[0], value: amount });
+    };
 
-window.addEventListener('load', initApp);
+    window.removeLiquidity = async () => {
+        const amount = document.getElementById('remove-liquidity-amount').value;
+        const accounts = await web3.eth.getAccounts();
+        pepeDexContract.methods.removeLiquidity(amount).send({ from: accounts[0] });
+    };
 
-async function addLiquidity() {
-    const amountToken = document.getElementById('addLiquidityAmount').value;
-    const amountETH = web3.utils.toWei(document.getElementById('addLiquidityETH').value, 'ether');
-    if (amountToken <= 0 || amountETH <= 0) {
-        window.alert('Please enter a valid amount.');
-        return;
-    }
-    try {
-        await contract.methods.addLiquidity(amountToken).send({ from: accounts[0], value: amountETH });
-        await updateUI();
-    } catch (error) {
-        console.error('An error occurred: ', error);
-        window.alert('An error occurred. Please check the console for more details.');
-    }
-}
+    window.swap = async () => {
+        const amountIn = document.getElementById('swap-amount').value;
+        const amountOutMin = document.getElementById('amount-out-min').value;
+        constmaxSlippage = document.getElementById('max-slippage').value;
+        const deadline = document.getElementById('deadline').value;
+        const accounts = await web3.eth.getAccounts();
+        pepeDexContract.methods.swap(amountIn, amountOutMin, maxSlippage, deadline).send({ from: accounts[0], value: amountIn });
+    };
 
-async function removeLiquidity() {
-    const liquidity = document.getElementById('removeLiquidity').value;
-    if (liquidity <= 0) {
-        window.alert('Please enter a valid amount.');
-        return;
-    }
-    try {
-        await contract.methods.removeLiquidity(liquidity).send({ from: accounts[0] });
-        await updateUI();
-    } catch (error) {
-        console.error('An error occurred: ', error);
-        window.alert('An error occurred. Please check the console for more details.');
-    }
-}
-
-async function swap() {
-    const amountIn = document.getElementById('swapAmountIn').value;
-    const maxSlippage = document.getElementById('swapMaxSlippage').value;
-    const deadline = document.getElementById('swapDeadline').value;
-    const amountETH = web3.utils.toWei(document.getElementById('swapETH').value, 'ether');
-    if (amountIn <= 0 || maxSlippage < 0 || maxSlippage > 100 || deadline <= Date.now() || amountETH <= 0) {
-        window.alert('Please enter valid values.');
-        return;
-    }
-    try {
-        await contract.methods.swap(amountIn, maxSlippage, deadline).send({ from: accounts[0], value: amountETH });
-        await updateUI();
-    } catch (error) {
-        console.error('An error occurred: ', error);
-        window.alert('An error occurred. Please check the console for more details.');
-    }
-}
-
-async function updateUI() {
-    // update UI with the latest contract and account info
-}
+    window.claimFees = async () => {
+        const accounts = await web3.eth.getAccounts();
+        pepeDexContract.methods.claimFees().send({ from: accounts[0] });
+    };
+});
