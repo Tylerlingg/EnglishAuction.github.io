@@ -1,36 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>pepeDex</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" href="styles.css">
+  <title>PepeDex - Peace and Love Version</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <header>
-        <img src="" alt="Frog Logo">
-        <h1>pepeDex</h1>
-    </header>
-    <section>
-        <h2>Add Liquidity</h2>
-        <input id="addLiquidityAmount" type="number" placeholder="Token amount" min="0">
-        <button onclick="addLiquidity()">Add Liquidity</button>
-    </section>
-    <section>
-        <h2>Remove Liquidity</h2>
-        <input id="removeLiquidityAmount" type="number" placeholder="Token amount" min="0">
-        <button onclick="removeLiquidity()">Remove Liquidity</button>
-    </section>
-    <section>
-        <h2>Swap Tokens</h2>
-        <input id="swapAmount" type="number" placeholder="Token amount" min="0">
-        <button onclick="swap()">Swap</button>
-    </section>
-    <section>
-        <h2>Reserves</h2>
-        <p id="reserveETH"></p>
-        <p id="reserveToken"></p>
-    </section>
-    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.3.4/dist/web3.min.js"></script>
-    <script src="app.js"></script>
+  <h1>PepeDex - Peace and Love Version</h1>
+  <div id="balance-container">
+    <h2>Your Balance: <span id="balance"></span></h2>
+  </div>
+  <div id="liquidity-container">
+    <h2>Liquidity Pool</h2>
+    <label for="amount-token">Token Amount:</label>
+    <input type="number" id="amount-token" placeholder="Enter token amount">
+    <button id="add-liquidity-button">Add Liquidity</button>
+  </div>
+  <div id="swap-container">
+    <h2>Swap Tokens for ETH</h2>
+    <label for="amount-in">Token Amount:</label>
+    <input type="number" id="amount-in" placeholder="Enter token amount">
+    <label for="amount-out-min">Minimum ETH Amount:</label>
+    <input type="number" id="amount-out-min" placeholder="Enter minimum ETH amount">
+    <label for="max-slippage">Maximum Slippage (%):</label>
+    <input type="number" id="max-slippage" placeholder="Enter maximum slippage">
+    <button id="swap-button">Swap</button>
+  </div>
+  <div id="fees-container">
+    <h2>Claim Fees</h2>
+    <button id="claim-fees-button">Claim Fees</button>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
