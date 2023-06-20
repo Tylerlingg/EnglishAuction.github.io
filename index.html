@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PepeDex - Peace and Love Version</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>pepeDex</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
 </head>
 <body>
-  <h1>PepeDex - Peace and Love Version</h1>
-  <div id="balance-container">
-    <h2>Your Balance: <span id="balance"></span></h2>
-  </div>
-  <div id="liquidity-container">
-    <h2>Liquidity Pool</h2>
-    <label for="amount-token">Token Amount:</label>
-    <input type="number" id="amount-token" placeholder="Enter token amount">
-    <button id="add-liquidity-button">Add Liquidity</button>
-  </div>
-  <div id="swap-container">
-    <h2>Swap Tokens for ETH</h2>
-    <label for="amount-in">Token Amount:</label>
-    <input type="number" id="amount-in" placeholder="Enter token amount">
-    <label for="amount-out-min">Minimum ETH Amount:</label>
-    <input type="number" id="amount-out-min" placeholder="Enter minimum ETH amount">
-    <label for="max-slippage">Maximum Slippage (%):</label>
-    <input type="number" id="max-slippage" placeholder="Enter maximum slippage">
-    <button id="swap-button">Swap</button>
-  </div>
-  <div id="fees-container">
-    <h2>Claim Fees</h2>
-    <button id="claim-fees-button">Claim Fees</button>
-  </div>
-  <script src="script.js"></script>
+    <div class="container">
+        <header>
+            <h1>pepeDex</h1>
+            <button id="connectWalletButton">Connect to MetaMask</button>
+        </header>
+        <section class="guide">
+            <h2>How to Use pepeDex</h2>
+            <ol>
+                <li>Connect your MetaMask wallet by clicking the "Connect to MetaMask" button.</li>
+                <li>Once connected, you can interact with the pepeDex smart contract.</li>
+                <li>Add liquidity by entering the amount of tokens you want to add and click "Add Liquidity".</li>
+                <li>Swap tokens for ETH by entering the amount and click "Swap".</li>
+                <li>Claim accumulated fees by clicking "Claim Fees".</li>
+            </ol>
+            <p>
+                pepeDex is an automated market maker (AMM) that allows users to swap tokens, add liquidity, and remove liquidity.
+                Liquidity providers can also claim their share of accumulated fees. It uses the Pepe token and integrates with Uniswap V3.
+            </p>
+        </section>
+    </div>
+    <script src="scripts.js"></script>
 </body>
 </html>
